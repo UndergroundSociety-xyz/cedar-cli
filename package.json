@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "start": "bun src/main.ts",
+    "test": "mocha -r ts-node/register 'test/*.spec.ts'"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.6.3",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@types/cli-progress": "^3.11.0",
+    "@types/sharp": "^0.30.4",
+    "@undergroundsociety/cybername-gen": "^1.1.0",
+    "cli-progress": "^3.11.2",
+    "commander": "^9.4.0",
+    "sharp": "^0.30.7",
+    "winston": "^3.8.1"
+  }
+}
