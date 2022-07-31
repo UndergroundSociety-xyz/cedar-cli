@@ -1,206 +1,205 @@
 import fs from 'fs'
-import config from '../config.json'
+import configFile from '../config.json'
+import pkg from '../package.json'
 import {Resource} from "./types/resource"
 import {AdjacencyMatrix} from "./types/adjacency-matrix"
-import {checkConditions, getDna, parseConditions, pickRandomIndex} from "./utils/helpers"
-import path from "path";
-import {INamingStrategy, NamingContext} from "./utils/naming";
-import {Step} from "./types/step";
+import {
+    getDna,
+    pickRandomIndex
+} from "./utils/helpers"
+import path from "path"
+import {INamingStrategy, NamingContext} from "./utils/naming"
+import {Step} from "./types/step"
 import {SharpImage} from './types/sharp-image'
-import sharp, {FormatEnum} from "sharp";
-import {Metadata, Properties, File} from "./types/metadata";
-import {NamingStrategiesRegistry} from "./utils/naming-strategies-registry";
-// import {initConsoleLogger, initFileLogger, initProgressBar} from "./src/utils/logger";
+import sharp, {FormatEnum} from "sharp"
+import {File, Metadata, Properties} from "./types/metadata"
+import {NamingStrategiesRegistry} from "./utils/naming-strategies-registry"
+import {program} from "commander"
+import {Logger} from "winston"
+import {initLogger, initProgressBar} from "./utils/logger"
 
-// import {program} from "commander"
-// todo : un-comment when bun supports child_process
-// program
-//     .name('Cedar CLI')
-//     .description('Solana NFT conditional generator')
-//     .version('1.0.0')
-//     .option('-q, --quiet', 'Quiet mode: no console output')
-//     .option('-c, --cache', 'generate images from cache file')
-//
-// program.parse()
-//
-// console.log(program.opts())
+program
+    .name(pkg.name)
+    .description(pkg.description)
+    .version(pkg.version)
+    .option('-q, --quiet', 'Quiet mode: no console output', false)
+    .option('-m, --metadata', 'No images, metadata cache files only', false)
+// .option('-c, --cache', 'generate images from cache file', false)
 
-// // todo : do not use consoleLogger if --quiet is enabled
-// const fileLogger = initFileLogger()
-// const consoleLogger = initConsoleLogger()
-//
-const startMsg = 'Starting Cedar...'
-console.log(`[${new Date().toISOString()}]:[INFO]:`, startMsg)
-// consoleLogger.info(startMsg)
-// fileLogger.info(startMsg)
+program.parse()
+
+const isQuietModeEnabled = program.opts().quiet
+const isMetadataOnlyEnabled = program.opts().metadata
+// const isCacheModeEnabled = program.opts().cache
+
+const logger: Logger = initLogger(isQuietModeEnabled)
+
+logger.info('Starting Cedar...')
+
+// todo : get config from cache
+// const config = isCacheModeEnabled ? JSON.parse('.cache/config.json') : configFile
+const config = configFile
+
+// logger.info(isCacheModeEnabled ? 'succesfully retrieved config from cache' : 'successfully loaded config from file')
+logger.info('successfully loaded config from file')
 
 const options = config.options
-const steps = config.steps as Step[]
-const resources = config.resources.map((r: any) => {
+const steps: Step[] = config.steps as Step[]
+const resources: Resource[] = config.resources.map((r: any, index: number) => {
     const res = new Resource()
+    res.idx = index
     res.name = r.name
     res.step = r.step
-    res.conditions = r.conditions ?? []
+    res.outcomes = r.outcomes ?? []
     if (r.uri) res.uri = r.uri
-    if (r.attribute) res.uri = r.uri
-    if (r.rarity) res.rarity = r.rarity
+    if (r.attribute) res.attribute = r.attribute
 
     return res
 })
 
+logger.info(`${resources.length} resources found and successfully initialized`)
+
 if (!fs.existsSync('.cache'))
     fs.mkdirSync('.cache')
 
-const cacheMsg = '.cache folder init'
-console.log(`[${new Date().toISOString()}]:[INFO]:`, cacheMsg)
-// consoleLogger.info(cacheMsg)
-// fileLogger.info(cacheMsg)
+// !isCacheModeEnabled && fs.writeFileSync('.cache/config.json', JSON.stringify(config))
+fs.writeFileSync('.cache/config.json', JSON.stringify(config))
+logger.info('.cache folder init')
 
-for (let i = 0; i < resources.length; i++) {
-    resources[i].idx = i
-}
-
-const resInitMsg = `${resources.length} resources found and successfully initialized`
-console.log(`[${new Date().toISOString()}]:[SUCCESS]:`, resInitMsg)
-// consoleLogger.info(resInitMsg)
-// fileLogger.info(resInitMsg)
 
 const matrix = new AdjacencyMatrix(resources.length)
 
 // setup the matrix
 resources.forEach(start => {
     resources.forEach(destination => {
-        if (start.step !== destination.step) {
-            /**
-             * If there are some resources with conditions we use the following business logic:
-             * if the starting vertex has no conditions itself, it can only lead to a destination that has a condition
-             * corresponding to it. In other words, say  the start is a "blue background" without a condition,
-             * and in the resources list, there is one having "bg:blue" in its conditions list,
-             * it means that the blue bg can only have one edge with this destination.
-             * If the starting vertex has conditions, we only add edges to destinations that don't have conditions themselves,
-             * and whose step don't match with the starting point step.
-             */
-            if (resources.some(r => r.conditions.length)) {
-                let add
-                if (!start.conditions.length) {
-                    add = parseConditions(destination.conditions)
-                        .some(con => con.step === start.step && con.resource === start.name)
-                } else {
-                    add = !destination.conditions.length && !parseConditions(start.conditions)
-                        .some(con => destination.step === con.step)
-                }
-
-                if (add) {
-                    matrix.addEdge(start.idx, destination.idx, destination.rarity ?? 10000)
-                    const msg = `added edge from ${start.step}:${start.name} to ${destination.step}:${destination.name} with rarity ${destination.rarity}`
-                    console.log(`[${new Date().toISOString()}]:[INFO]:`, msg)
-                    // consoleLogger.info(msg)
-                    // fileLogger.info(msg)
-                }
-            } else {
-                matrix.addEdge(start.idx, destination.idx, destination.rarity ?? 10000)
-                const msg = `added edge from ${start.step}:${start.name} to ${destination.step}:${destination.name} with rarity ${destination.rarity}`
-                console.log(`[${new Date().toISOString()}]:[INFO]:`, msg)
-                // consoleLogger.info(msg)
-                // fileLogger.info(msg)
+        if (start.outcomes.length) {
+            const outcome = start.outcomes.find(outcome => outcome.step === destination.step && outcome.name === destination.name)
+            if (outcome) {
+                matrix.addEdge(start.idx, destination.idx, outcome.chance)
+                logger.info(`added edge from ${start.step}:${start.name} to ${destination.step}:${destination.name} with a ${outcome?.chance / 100}% chance`)
             }
         }
     })
 })
 
-// await Bun.write(".cache/matrix.json", JSON.stringify(matrix))
+// if (!isCacheModeEnabled) {
+//     fs.writeFileSync(".cache/matrix.json", JSON.stringify(matrix))
+//     logger.info(`matrix saved at .cache/matrix.json`)
+// }
 fs.writeFileSync(".cache/matrix.json", JSON.stringify(matrix))
-const matrixMsg = `matrix saved at .cache/matrix.json`
-console.log(`[${new Date().toISOString()}]:[SUCCESS]:`, matrixMsg)
-// consoleLogger.info(matrixMsg)
-// fileLogger.info(matrixMsg)
+logger.info(`matrix saved at .cache/matrix.json`)
+
+const header = `,${resources.map(r => `${r.step}:${r.name}`).join(',')}`
+const rows = [...matrix.vertex].map((v, i) => `${resources[i].step}:${resources[i].name},` + v.join(',')).join('\n')
+const csv = `${header}\n${rows}`
+fs.writeFileSync(".cache/matrix.csv", csv)
 
 /**
  * Builds one list of resources by traversing the matrix
  * This is DFS inspired
  */
-export const buildResourcesList = (matrix: AdjacencyMatrix, resources: Resource[]): Resource[] => {
-    const results = []
-    const visited = []
-    const steps: string[] = []
-    const start = pickRandomIndex(resources.filter(r => !r.conditions.length).map(r => r.rarity))
+export const buildResourcesList = (matrix: AdjacencyMatrix, steps: Step[], resources: Resource[], config: any): Resource[] => {
+    const results: Set<Resource> = new Set()
+    const visited: boolean[] = []
+    const firstResourcesChances = config.firstResource.map((r: any) => Number(r.chance))
+    const firstResourceIndex = pickRandomIndex(firstResourcesChances) as number
+    const firstResource = config.firstResource[firstResourceIndex]
+    const start = resources.findIndex(r => r.step === firstResource.step && r.name === firstResource.name)
+
     const stack = [start]
     visited[start] = true
     let current
 
     while (stack.length) {
-        current = stack.pop()
-        results.push(current)
-        steps.push(resources[current].step)
-        const next = pickRandomIndex(matrix.vertex[current])
+        current = stack.pop() as number
+        const currentResource = resources[current]
+        results.add(currentResource)
 
-        if (next !== undefined && !visited[next] && !steps.includes(resources[next].step)) {
+        const next = pickRandomIndex(matrix.vertex[current])
+        // todo : check if next has restrictions.
+        //  If yes => check is restrictions are matching.
+        //  If yes, pick another random next resource.
+        //  If all indexes have been visited and if the outcome is mandatory, break.
+
+        // todo : handle optional. check config.json innershape idea
+
+        if (next !== undefined && !visited[next]) {
             visited[next] = true
             stack.push(next)
         }
     }
 
-    return results.map(r => resources[r])
+    return [...results]
 }
 
 /**
  * Builds as many Resources lists as required by the supply
  */
-export const buildResourcesLists = (matrix: AdjacencyMatrix, resources: Resource[], steps: Step[], options: any): Resource[][] => {
-    const items = []
-    const dnas = []
-    // todo : un-comment when bun supports it
-    // const progressBar = initProgressBar(`building resources lists |{bar}| {percentage}% || {value}/{total} || {duration_formatted} elapsed || ETA {eta_formatted} \n`)
-    // progressBar.start(supply, 0)
+export const buildResourcesLists = (matrix: AdjacencyMatrix, resources: Resource[], steps: Step[], config: any): Resource[][] => {
+    const items: Resource[][] = []
+    const dnas: string[] = []
 
-    for (let i = 0; i < options.supply;) {
-        const rl = buildResourcesList(matrix, resources)
+    const progressBar = initProgressBar(`building resources lists |{bar}| {percentage}% || {value}/{total} || {duration_formatted} elapsed || ETA {eta_formatted}`)
+
+    if (!isQuietModeEnabled) {
+        progressBar.start(config.options.supply, 0)
+    }
+
+    for (let i = 0; i < config.options.supply;) {
+        const rl = buildResourcesList(matrix, steps, resources, config)
 
         const sorting = steps.map(s => s.name)
         rl.sort((a, b) => sorting.indexOf(a.step) - sorting.indexOf(b.step))
 
-        const isValid = rl.every(r => checkConditions(resources, r))
         const dna = getDna(rl)
         // bypassing unicity constraint if uniqueEditions is set to false
-        const isUnique = options.uniqueEditions ? !dnas.includes(dna) : true
+        const isUnique = config.options.uniqueEditions ? !dnas.includes(dna) : true
 
-        if (isUnique && isValid) {
+        if (isUnique) {
             items.push(rl)
-            rl.forEach(r => r.count++ && (r.supplyPct = (r.count / options.supply) * 100))
+            dnas.push(dna)
+            rl.forEach(r => r.count++ && (r.supplyPct = (r.count / config.options.supply) * 100))
             i++
-            // progressBar.increment()
-            console.log(`[${new Date().toISOString()}]:[INFO]:`, `added ${dna}`)
-        } else {
-            let word
-            if (isUnique && !isValid) word = 'not valid'
-            if (!isUnique && isValid) word = 'not unique'
-            if (!isUnique && !isValid) word = 'not unique nor valid'
-            console.log(`[${new Date().toISOString()}]:[WARN]:`, `dna "${dna}" is ${word}, skipping`)
+
+            !isQuietModeEnabled && progressBar.increment()
         }
     }
-    // progressBar.stop()
+    !isQuietModeEnabled && progressBar?.stop()
 
     return items
 }
 
-const buildMsg = `starting to build resources lists...`
-console.log(`[${new Date().toISOString()}]:[INFO]:`, buildMsg)
-// consoleLogger.info(buildMsg)
-// fileLogger.info(buildMsg)
-// todo : run on the condition that --cache is disabled
-const resourcesLists = buildResourcesLists(matrix, resources, steps, options.supply)
+// logger.info(isCacheModeEnabled ? `retrieving resources lists from cache...` : `starting to build resources lists...`)
+logger.info(`starting to build resources lists...`)
 
-const buildSuccessMsg = `successfully built ${resourcesLists.length} resources lists !`
-console.log(`[${new Date().toISOString()}]:[SUCCESS]:`, buildSuccessMsg)
-// consoleLogger.info(buildSuccessMsg)
-// fileLogger.info(buildSuccessMsg)
+// const resourcesLists = !isCacheModeEnabled ? buildResourcesLists(matrix, resources, steps, options.supply) : JSON.parse('.cache/resources-lists.json') as Resource[][]
+const resourcesLists = buildResourcesLists(matrix, resources, steps, config)
 
-// await Bun.write(".cache/stats.json", JSON.stringify(resources))
-// await Bun.write(".cache/resources-lists.json", JSON.stringify(resourcesLists))
+if (resourcesLists.length === options.supply) {
+    // logger.info(`successfully ${isCacheModeEnabled ? 'retrieved' : 'built'} ${resourcesLists.length} resources lists !`)
+    logger.info(`successfully built ${resourcesLists.length} resources lists !`)
+} else {
+    // const err = `only ${resourcesLists.length} resources lists ${isCacheModeEnabled ? 'retrieved' : 'built'}`
+    const err = `${resourcesLists.length}/${options.supply} resources lists built`
+    logger.error(err)
+    process.exit()
+}
+
+// if (!isCacheModeEnabled) {
+//     fs.writeFileSync(".cache/stats.json", JSON.stringify(resources))
+//     fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
+// }
 fs.writeFileSync(".cache/stats.json", JSON.stringify(resources))
 fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
 
-
+/**
+ * Generates a metadata json file from resources having an attribute
+ * @param resources
+ * @param config
+ * @param edition
+ * @param outputUri
+ * @param namingContext
+ */
 export const generateMetadataFile = async (resources: Resource[], config: any, edition: number, outputUri: string, namingContext: NamingContext) => {
     const filename = `${edition}.json`
     let name = namingContext.execute(config, resources, edition)
@@ -208,7 +207,7 @@ export const generateMetadataFile = async (resources: Resource[], config: any, e
     const filepath = path.join(outputUri, `${edition}.${config.options.outputFormat ?? 'png'}`)
 
     const attributes = resources
-        .filter(resource => resource.attribute)
+        .filter(resource => !!resource.attribute)
         .map(resource => resource.attribute)
 
     const files = new File(filepath, `image/${config.options.outputFormat ?? 'png'}`)
@@ -220,15 +219,22 @@ export const generateMetadataFile = async (resources: Resource[], config: any, e
         config.metadata.description,
         config.metadata.sellerFeesBasisPoint,
         filepath,
-        attributes,
+        attributes as { trait_type: string, value: string }[],
         properties,
         config.metadata.collection
     )
 
-    // await Bun.write(path.join(outputUri, filename), JSON.stringify(metadata))
     fs.writeFileSync(path.join(outputUri, filename), JSON.stringify(metadata))
 }
 
+/**
+ * Generates an image from a resource's uri
+ * @param resources
+ * @param steps
+ * @param edition
+ * @param outputUri
+ * @param format
+ */
 export const generateImage = async (resources: Resource[], steps: Step[], edition: number, outputUri: string, format: string = 'png') => {
     if (!resources[0].uri) {
         throw new Error("First step resource must have a uri")
@@ -240,7 +246,7 @@ export const generateImage = async (resources: Resource[], steps: Step[], editio
             const image: SharpImage = {input: r.uri as string}
             const step = steps.find(s => r.step === s.name)
             if (step?.blend !== 'normal') {
-                image.blend = step.blend
+                image.blend = step?.blend
             }
 
             return image
@@ -252,28 +258,43 @@ export const generateImage = async (resources: Resource[], steps: Step[], editio
     await sharp(resources[0].uri).composite(compose).toFormat(format as keyof FormatEnum).toFile(filepath)
 }
 
-export const generateNfts = async (resourcesLists: Resource[][], config: any, outputUri: string, namingContext: NamingContext) => {
+/**
+ * Generates a supply of NFT images and metadata
+ * @param resourcesLists
+ * @param config
+ * @param outputUri
+ * @param namingContext
+ * @param quietMode
+ */
+export const generateNfts = async (resourcesLists: Resource[][], config: any, outputUri: string, namingContext: NamingContext, quietMode = false) => {
+    let progressBar
 
+    if (!quietMode) {
+        progressBar = initProgressBar(`building NFTs |{bar}| {percentage}% || {value}/{total} || {duration_formatted} elapsed || ETA {eta_formatted}`)
+        progressBar.start(config.options.supply, 0)
+    }
     // todo : ability to pause / restart on an arbitrary edition
     for (let i = 1; i <= resourcesLists.length; i++) {
-        console.log(`[${new Date().toISOString()}]:[INFO]:`, `generating edition #${i}`)
         await generateImage(resourcesLists[i - 1], config.steps, i, outputUri, config.options.outputFormat)
         await generateMetadataFile(resourcesLists[i - 1], config, i, outputUri, namingContext)
+        !quietMode && progressBar?.increment()
     }
+
+    !quietMode && progressBar?.stop()
 }
 
 const outputUri = 'output'
 const namingStrategy = NamingStrategiesRegistry.get(config.options.namingStrategy) ?? {} as INamingStrategy
 const namingContext = new NamingContext(namingStrategy)
 
-if (!fs.existsSync(outputUri))
-    fs.mkdirSync(outputUri)
+if (fs.existsSync(outputUri)) fs.rmSync(outputUri, {recursive: true})
+fs.mkdirSync(outputUri)
 
-const outputMsg = 'output folder init'
-console.log(`[${new Date().toISOString()}]:[INFO]:`, outputMsg)
-// consoleLogger.info(outputMsg)
-// fileLogger.info(outputMsg)
+logger.info('output folder init')
 
-// generateNfts(resourcesLists, config, outputUri, namingContext).then(
-//     _ => console.log(`[${new Date().toISOString()}]:[SUCCESS]:`, 'done generating images and metadata')
-// )
+try {
+    !isMetadataOnlyEnabled && generateNfts(resourcesLists, config, outputUri, namingContext, isQuietModeEnabled)
+        .then(_ => logger.info('done generating images and metadata'))
+} catch (e) {
+    logger.error((e as Error).message)
+}

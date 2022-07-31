@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "collection": {
+      "family": "",
+      "name": ""
+    },
+    "creators": [
+      {
+        "address": "",
+        "share": 0
+      }
+    ],
+    "description": "",
+    "name": "",
+    "sellerFeesBasisPoint": 0,
+    "symbol": ""
+  },
+  "options": {
+    "supply": 0,
+    "namingStrategy": "default",
+    "uniqueEditions": true
+  },
+  "steps": [
+    {
+      "name": "",
+      "blend": "normal"
+    }
+  ],
+  "resources": [
+    {
+      "name": "",
+      "step": "",
+      "rarity": 0,
+      "uri": "",
+      "conditions": [],
+      "attribute": {
+        "trait_type": "",
+        "value": ""
+      }
+    }
+  ]
+}

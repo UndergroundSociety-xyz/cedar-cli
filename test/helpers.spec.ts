@@ -5,33 +5,33 @@ chai.should()
 
 describe('random picker', () => {
 
-    const raritiesLists = [
+    const chancesList = [
         [3334, 3333, 3333, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 333, 666, 6667, 0, 1000, 0, 334, 1000]
     ]
 
-    raritiesLists.forEach(r => it('should pick an index in a list of 10 rarities with a 10% error margin', () => {
-        const selectedIndexes = []
+    chancesList.forEach(c => it('should pick an index in a list of 10 rarities with a 10% error margin', () => {
+        const selectedIndexes: number[] = []
         const iterations = 100000
         let undefinedCount = 0
 
         for (let i = 0; i < iterations; i++) {
-            const selectedIndex = pickRandomIndex(r)
+            const selectedIndex = pickRandomIndex(c)
             selectedIndex !== undefined && selectedIndexes.push(selectedIndex)
             selectedIndex === undefined && undefinedCount++
         }
 
         undefinedCount.should.equal(0)
 
-        r.forEach((rarity, index) => {
+        c.forEach((chance, index) => {
             const filtered = selectedIndexes.filter(si => si === index)
             const count = filtered.length
-            const pct = rarity / 10000
+            const pct = chance / 10000
 
             const min = Math.floor(iterations * (pct * 0.9))
             const max = Math.ceil(iterations * (pct * 1.10))
 
-            if (rarity == 0) {
+            if (chance == 0) {
                 count.should.equal(0)
             } else {
                 count.should.be.above(min).and.below(max)
@@ -40,9 +40,9 @@ describe('random picker', () => {
     }))
 
 
-    it('should pick an index in a list of 10 rarities with a 10% error margin, rarities not adding up to 10k', () => {
+    it('should pick an index in a list of 10 rarities with a 10% error margin, step not required', () => {
         const rarities = [0, 0, 333, 666, 5667, 0, 500, 0, 334, 500]
-        const selectedIndexes = []
+        const selectedIndexes: number[] = []
         const iterations = 100000
         let undefinedCount = 0
         const undefinedRarity = 10000 - rarities.reduce((a,v) => a+v, 0)

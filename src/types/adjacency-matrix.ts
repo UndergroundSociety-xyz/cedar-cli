@@ -1,6 +1,6 @@
 export class AdjacencyMatrix {
-    public vertex: number[][];
-    public size: number;
+    public vertex: number[][] = [];
+    public size: number = 0;
 
     constructor(size: number) {
         if (size <= 0) {
@@ -10,10 +10,10 @@ export class AdjacencyMatrix {
         this.size = size;
     }
 
-    public addEdge(start: number, end: number, rarity: number) {
+    public addEdge(start: number, end: number, chance: number) {
         if (this.size > start && this.size > end) {
             // Set the weighted connection
-            this.vertex[start][end] = rarity;
+            this.vertex[start][end] = chance;
         }
     }
 
