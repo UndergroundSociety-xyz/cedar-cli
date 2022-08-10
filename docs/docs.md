@@ -33,6 +33,7 @@ It is faster than [Node Canvas](https://github.com/Automattic/node-canvas) (used
 | Machine specs                             | Supply | Nb of Layers | Generation time |
 |:------------------------------------------|-------:|-------------:|----------------:|
 | Macbook Pro 15" 2016 - Core i7 - RAM 16GB |   1000 |            5 |             12s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB |  10000 |            5 |           1m54s |
 
 ## How to
 
