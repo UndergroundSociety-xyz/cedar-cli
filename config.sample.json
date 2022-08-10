@@ -30,9 +30,13 @@
     {
       "name": "",
       "step": "",
-      "rarity": 0,
+      "restrictions":  [
+        {"step": "", "name": "" }
+      ],
       "uri": "",
-      "conditions": [],
+      "outcomes": [
+        {"step": "", "name": "", "chance": 10000 }
+      ],
       "attribute": {
         "trait_type": "",
         "value": ""
