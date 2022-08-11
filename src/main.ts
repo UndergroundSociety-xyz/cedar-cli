@@ -50,6 +50,7 @@ const resources: Resource[] = config.resources.map((r: any, index: number) => {
     res.idx = index
     res.name = r.name
     res.step = r.step
+    res.restrictions = r.restrictions ?? []
     res.outcomes = r.outcomes ?? []
     if (r.uri) res.uri = r.uri
     if (r.attribute) res.attribute = r.attribute
@@ -115,13 +116,43 @@ export const buildResourcesList = (matrix: AdjacencyMatrix, steps: Step[], resou
         const currentResource = resources[current]
         results.add(currentResource)
 
-        const next = pickRandomIndex(matrix.vertex[current])
-        // todo : check if next has restrictions.
-        //  If yes => check is restrictions are matching.
-        //  If yes, pick another random next resource.
-        //  If all indexes have been visited and if the outcome is mandatory, break.
+        let next = pickRandomIndex(matrix.vertex[current])
 
-        // todo : handle optional. check config.json innershape idea
+        if (next && resources[next].restrictions.length) {
+
+            const nextStack = [next]
+            const nextVisited: boolean[] = []
+            nextVisited[next] = true
+            let currentNext: number | undefined = next
+
+            while (nextStack.length) {
+                currentNext = nextStack.pop() as number
+
+                // if one of results is found in the next one's restrictions, then pick a new next resource and push it to the stack if it exists.
+                // If it is undefined, it cannot have any restriction, so we can use it.
+                if (resources[currentNext].restrictions.length
+                    && resources[currentNext].restrictions.some(rn => [...results].some(res => res.name === rn.name && res.step === rn.step))) {
+
+                    const newNext = pickRandomIndex(matrix.vertex[current])
+
+                    if (newNext) {
+                        nextStack.push(newNext)
+                        nextVisited[currentNext] = true
+                    } else {
+                        currentNext = newNext
+                    }
+                }
+
+                // if every outcome of the current resource has been visited, exit
+                if (matrix.vertex[current].every((chance, idx) => nextVisited[idx])) {
+                    logger.error(`no possible outcome for ${currentResource.step}:${currentResource.name}`)
+
+                    process.exit()
+                }
+            }
+
+            next = currentNext
+        }
 
         if (next !== undefined && !visited[next]) {
             visited[next] = true

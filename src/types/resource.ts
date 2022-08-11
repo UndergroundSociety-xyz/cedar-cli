@@ -3,7 +3,8 @@ export class Resource {
     name: string = ''
     step: string = ''
     uri?: string
-    outcomes: { step: string, name: string, chance: number}[] = []
+    restrictions: { step: string, name: string }[] = []
+    outcomes: { step: string, name: string, chance: number }[] = []
     attribute?: { trait_type: string, value: string }
     count: number = 0
     supplyPct: number = 0
