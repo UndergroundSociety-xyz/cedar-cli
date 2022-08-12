@@ -2,7 +2,7 @@ export class Metadata {
     public name: string
     public symbol: string
     public description: string
-    public seller_fee_basis_point: number
+    public seller_fee_basis_points: number
     public image: string
     public attributes: Attribute[]
     public properties: Properties
@@ -11,7 +11,7 @@ export class Metadata {
     constructor(name: string,
                 symbol: string,
                 description: string,
-                seller_fee_basis_point: number,
+                seller_fee_basis_points: number,
                 image: string,
                 attributes: Attribute[],
                 properties: Properties,
@@ -19,7 +19,7 @@ export class Metadata {
         this.name = name
         this.symbol = symbol
         this.description = description
-        this.seller_fee_basis_point = seller_fee_basis_point
+        this.seller_fee_basis_points = seller_fee_basis_points
         this.image = image
         this.attributes = attributes
         this.properties = properties
