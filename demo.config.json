@@ -1,0 +1,552 @@
+{
+  "metadata": {
+    "collection": {
+      "family": "Shapes",
+      "name": "Shapes"
+    },
+    "creators": [
+      {
+        "address": "test-address",
+        "share": 100
+      }
+    ],
+    "description": "Test Shapes",
+    "name": "Shapes",
+    "sellerFeesBasisPoint": 500,
+    "symbol": "SHP"
+  },
+  "options": {
+    "supply": 100,
+    "namingStrategy": "cyberpunk",
+    "uniqueEditions": true
+  },
+  "steps": [
+    {
+      "name": "gender"
+    },
+    {
+      "name": "bg",
+      "blend": "normal"
+    },
+    {
+      "name": "shp.col",
+      "blend": "normal"
+    },
+    {
+      "name": "shp",
+      "blend": "normal"
+    },
+    {
+      "name": "in.shp",
+      "blend": "normal"
+    },
+    {
+      "name": "corner",
+      "blend": "normal"
+    }
+  ],
+  "resources": [
+    {
+      "name": "male",
+      "step": "gender",
+      "outcomes": [
+        {
+          "step": "bg",
+          "name": "red",
+          "chance": 3333
+        },
+        {
+          "step": "bg",
+          "name": "blue",
+          "chance": 3333
+        },
+        {
+          "step": "bg",
+          "name": "green",
+          "chance": 3333
+        }
+      ],
+      "attribute": {
+        "trait_type": "Gender",
+        "value": "Male"
+      }
+    },
+    {
+      "name": "female",
+      "step": "gender",
+      "outcomes": [
+        {
+          "step": "bg",
+          "name": "red",
+          "chance": 3333
+        },
+        {
+          "step": "bg",
+          "name": "blue",
+          "chance": 3333
+        },
+        {
+          "step": "bg",
+          "name": "green",
+          "chance": 3333
+        }
+      ],
+      "attribute": {
+        "trait_type": "Gender",
+        "value": "Female"
+      }
+    },
+    {
+      "name": "blue",
+      "step": "bg",
+      "uri": "assets/bg/blue.png",
+      "outcomes": [
+        {
+          "step": "shp.col",
+          "name": "red.tri",
+          "chance": "1666"
+        },
+        {
+          "step": "shp.col",
+          "name": "red.sq",
+          "chance": "1666"
+        },
+        {
+          "step": "shp.col",
+          "name": "red.ci",
+          "chance": "1666"
+        },
+        {
+          "step": "shp.col",
+          "name": "green.tri",
+          "chance": "1666"
+        },
+        {
+          "step": "shp.col",
+          "name": "green.sq",
+          "chance": "1666"
+        },
+        {
+          "step": "shp.col",
+          "name": "green.ci",
+          "chance": "1666"
+        }
+      ],
+      "attribute": {
+        "trait_type": "Background",
+        "value": "Blue"
+      }
+    },
+    {
+      "name": "red",
+      "step": "bg",
+      "uri": "assets/bg/red.png",
+      "outcomes": [
+        {
+          "step": "shp.col",
+          "name": "blue.tri",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "blue.sq",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "blue.ci",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "green.tri",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "green.sq",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "green.ci",
+          "chance": 1666
+        }
+      ],
+      "attribute": {
+        "trait_type": "Background",
+        "value": "Red"
+      }
+    },
+    {
+      "name": "green",
+      "step": "bg",
+      "uri": "assets/bg/green.png",
+      "outcomes": [
+        {
+          "step": "shp.col",
+          "name": "red.tri",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "red.sq",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "red.ci",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "blue.tri",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "blue.sq",
+          "chance": 1666
+        },
+        {
+          "step": "shp.col",
+          "name": "blue.ci",
+          "chance": 1666
+        }
+      ],
+      "attribute": {
+        "trait_type": "Background",
+        "value": "Green"
+      }
+    },
+    {
+      "name": "triangle",
+      "step": "shp",
+      "uri": "assets/shp/triangle.png",
+      "outcomes": [
+        {
+          "step": "in.shp",
+          "name": "triangle",
+          "chance": 8000
+        },
+        {
+          "step": "corner",
+          "name": "square",
+          "chance": 1000
+        },
+        {
+          "step": "corner",
+          "name": "circle",
+          "chance": 1000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape",
+        "value": "Triangle"
+      }
+    },
+    {
+      "name": "square",
+      "step": "shp",
+      "uri": "assets/shp/square.png",
+      "outcomes": [
+        {
+          "step": "in.shp",
+          "name": "square",
+          "chance": 8000
+        },
+        {
+          "step": "corner",
+          "name": "triangle",
+          "chance": 1000
+        },
+        {
+          "step": "corner",
+          "name": "circle",
+          "chance": 1000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape",
+        "value": "Square"
+      }
+    },
+    {
+      "name": "circle",
+      "step": "shp",
+      "uri": "assets/shp/circle.png",
+      "outcomes": [
+        {
+          "step": "in.shp",
+          "name": "circle",
+          "chance": 8000
+        },
+        {
+          "step": "corner",
+          "name": "square",
+          "chance": 1000
+        },
+        {
+          "step": "corner",
+          "name": "triangle",
+          "chance": 1000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape",
+        "value": "Circle"
+      }
+    },
+    {
+      "name": "triangle",
+      "step": "in.shp",
+      "uri": "assets/in.shp/triangle.png",
+      "outcomes": [
+        {
+          "step": "corner",
+          "name": "square",
+          "chance": 3333
+        },
+        {
+          "step": "corner",
+          "name": "circle",
+          "chance": 3333
+        }
+      ],
+      "attribute": {
+        "trait_type": "Inner Shape",
+        "value": "Triangle"
+      }
+    },
+    {
+      "name": "square",
+      "step": "in.shp",
+      "uri": "assets/in.shp/square.png",
+      "outcomes": [
+        {
+          "step": "corner",
+          "name": "triangle",
+          "chance": 3333
+        },
+        {
+          "step": "corner",
+          "name": "circle",
+          "chance": 3333
+        }
+      ],
+      "attribute": {
+        "trait_type": "Inner Shape",
+        "value": "Square"
+      }
+    },
+    {
+      "name": "circle",
+      "step": "in.shp",
+      "uri": "assets/in.shp/circle.png",
+      "outcomes": [
+        {
+          "step": "corner",
+          "name": "square",
+          "chance": 3333
+        },
+        {
+          "step": "corner",
+          "name": "triangle",
+          "chance": 3333
+        }
+      ],
+      "attribute": {
+        "trait_type": "Inner Shape",
+        "value": "Circle"
+      }
+    },
+    {
+      "name": "blue.tri",
+      "step": "shp.col",
+      "uri": "assets/shp.col/blue.tri.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "triangle",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Blue"
+      }
+    },
+    {
+      "name": "blue.sq",
+      "step": "shp.col",
+      "uri": "assets/shp.col/blue.sq.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "square",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Blue"
+      }
+    },
+    {
+      "name": "blue.ci",
+      "step": "shp.col",
+      "uri": "assets/shp.col/blue.ci.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "circle",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Blue"
+      }
+    },
+    {
+      "name": "red.tri",
+      "step": "shp.col",
+      "uri": "assets/shp.col/red.tri.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "triangle",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Red"
+      }
+    },
+    {
+      "name": "red.sq",
+      "step": "shp.col",
+      "uri": "assets/shp.col/red.sq.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "square",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Red"
+      }
+    },
+    {
+      "name": "red.ci",
+      "step": "shp.col",
+      "uri": "assets/shp.col/red.ci.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "circle",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Red"
+      }
+    },
+    {
+      "name": "green.tri",
+      "step": "shp.col",
+      "uri": "assets/shp.col/green.tri.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "triangle",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Green"
+      }
+    },
+    {
+      "name": "green.sq",
+      "step": "shp.col",
+      "uri": "assets/shp.col/green.sq.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "square",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Green"
+      }
+    },
+    {
+      "name": "green.ci",
+      "step": "shp.col",
+      "uri": "assets/shp.col/green.ci.png",
+      "outcomes": [
+        {
+          "step": "shp",
+          "name": "circle",
+          "chance": 10000
+        }
+      ],
+      "attribute": {
+        "trait_type": "Shape Color",
+        "value": "Green"
+      }
+    },
+    {
+      "name": "triangle",
+      "step": "corner",
+      "uri": "assets/corner/triangle.png",
+      "attribute": {
+        "trait_type": "Corner",
+        "value": "Triangle"
+      }
+    },
+    {
+      "name": "square",
+      "step": "corner",
+      "uri": "assets/corner/square.png",
+      "attribute": {
+        "trait_type": "Corner",
+        "value": "Square"
+      }
+    },
+    {
+      "name": "circle",
+      "step": "corner",
+      "restrictions": [
+        {
+          "step": "bg",
+          "name": "blue"
+        }
+      ],
+      "attribute": {
+        "trait_type": "Corner",
+        "value": "Circle"
+      }
+    }
+  ],
+  "rootOutcomes": [
+    {
+      "step": "gender",
+      "name": "female",
+      "chance": 5000
+    },
+    {
+      "step": "gender",
+      "name": "male",
+      "chance": 5000
+    }
+  ]
+}

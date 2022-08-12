@@ -47,6 +47,21 @@ Options:
 
 For more information see [docs](docs/docs.md)
 
+## Demo
+
+A few assets are available in `demo-assets` folder.
+
+Just run :
+```shell
+cp demo.config.json config.json
+```
+and :
+```shell
+yarn start
+```
+
+Files will be in the `output` folder.
+
 ## License
 
 This app is under AGPL-3.0 License. See [LICENSE](LICENSE) for more information.
