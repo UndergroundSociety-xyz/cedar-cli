@@ -153,9 +153,11 @@ The `supply` is the number of NFTs you're willing to get.
 
 `namingStrategy` is on `default`, it means each edition will be named like "{name of the collection} #{edition
 number}" ("Underground Society #4622" for example).
-You can use alternative naming strategies.
 
-If you're not a dev, you should just leave it on `default`, but if you're willing to dig a bit in the code, you can
+You can use alternative naming strategies, such as `cyberpunk` to generate a cyberpunkish first name and last name (needs a `gender` step), or `random-words` which will generate 2 random words (such as "Egg Negative" or "Sure Satellites"...).
+You can also implement your own.
+
+If you're not sure what to do, just leave it on `default`. If you're willing to dig a bit in the code, you can
 check it out [here](/devs/naming-strategies.md).
 
 #### Steps

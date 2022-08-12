@@ -1,11 +1,13 @@
 import {INamingStrategy} from "./naming";
 import {CyberpunkNamingStrategy} from "./cyberpunk.naming-strategy";
 import {DefaultNamingStrategy} from "./default.naming-strategy";
+import {RandomWordsNamingStrategy} from "./random-words.naming-strategy";
 
 export class NamingStrategiesRegistry {
     private static _reg: Map<string, INamingStrategy> = new Map<string, INamingStrategy>([
         ['default', new DefaultNamingStrategy()],
-        ['cyberpunk', new CyberpunkNamingStrategy()]
+        ['cyberpunk', new CyberpunkNamingStrategy()],
+        ['random-words', new RandomWordsNamingStrategy()],
     ])
 
     public static getDefault(): INamingStrategy {

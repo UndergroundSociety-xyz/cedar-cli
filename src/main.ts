@@ -226,7 +226,9 @@ fs.writeFileSync(".cache/stats.json", JSON.stringify(resources.map(r => ({
     supplyPct: r.supplyPct,
     quantity: r.count
 }))))
+logger.info('stats saved at .cache/stats.json')
 fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
+logger.info('resources lists saved at .cache/resources-list.json')
 
 /**
  * Generates a metadata json file from resources having an attribute
