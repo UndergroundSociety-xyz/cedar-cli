@@ -102,9 +102,9 @@ fs.writeFileSync(".cache/matrix.csv", csv)
 export const buildResourcesList = (matrix: AdjacencyMatrix, steps: Step[], resources: Resource[], config: any): Resource[] => {
     const results: Set<Resource> = new Set()
     const visited: boolean[] = []
-    const firstResourcesChances = config.firstResource.map((r: any) => Number(r.chance))
-    const firstResourceIndex = pickRandomIndex(firstResourcesChances) as number
-    const firstResource = config.firstResource[firstResourceIndex]
+    const rootChances = config.rootOutcomes.map((r: any) => Number(r.chance))
+    const firstResourceIndex = pickRandomIndex(rootChances) as number
+    const firstResource = config.rootOutcomes[firstResourceIndex]
     const start = resources.findIndex(r => r.step === firstResource.step && r.name === firstResource.name)
 
     const stack = [start]
@@ -220,7 +220,12 @@ if (resourcesLists.length === options.supply) {
 //     fs.writeFileSync(".cache/stats.json", JSON.stringify(resources))
 //     fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
 // }
-fs.writeFileSync(".cache/stats.json", JSON.stringify(resources))
+fs.writeFileSync(".cache/stats.json", JSON.stringify(resources.map(r => ({
+    step: r.step,
+    name: r.name,
+    supplyPct: r.supplyPct,
+    quantity: r.count
+}))))
 fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
 
 /**
@@ -267,11 +272,7 @@ export const generateMetadataFile = async (resources: Resource[], config: any, e
  * @param format
  */
 export const generateImage = async (resources: Resource[], steps: Step[], edition: number, outputUri: string, format: string = 'png') => {
-    if (!resources[0].uri) {
-        throw new Error("First step resource must have a uri")
-    }
-
-    const compose: SharpImage[] = resources
+    const [base, ...compose] = resources
         .filter(r => r.uri)
         .map(r => {
             const image: SharpImage = {input: r.uri as string}
@@ -281,12 +282,12 @@ export const generateImage = async (resources: Resource[], steps: Step[], editio
             }
 
             return image
-        }).slice(1)
+        })
 
     const filename = `${edition}.${format}`
     const filepath = path.join(outputUri, filename)
 
-    await sharp(resources[0].uri).composite(compose).toFormat(format as keyof FormatEnum).toFile(filepath)
+    await sharp(base.input).composite(compose).toFormat(format as keyof FormatEnum).toFile(filepath)
 }
 
 /**

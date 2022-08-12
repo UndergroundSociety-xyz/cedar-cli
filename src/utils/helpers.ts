@@ -4,7 +4,10 @@ import {Resource} from "../types/resource";
  * Picks a random index in a list of rarities
  * @param chances
  */
-export const pickRandomIndex = (chances: number[]): number | undefined => {
+export const pickRandomIndex = (chances: number[] = []): number | undefined => {
+    if (chances.every(c => c === 0)) {
+        return undefined
+    }
     const chancesClone = [...chances]
     const weights: number[] = []
     let sum = chances.reduce((acc, chance) => acc + chance, 0)

@@ -1,6 +1,6 @@
 export interface Step {
     name: string
-    blend :
+    blend? :
         | 'normal'
         | 'atop'
         | 'dest-atop'
