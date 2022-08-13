@@ -119,5 +119,6 @@ dist
 .idea
 
 config.json
+config-*.json
 assets
 output

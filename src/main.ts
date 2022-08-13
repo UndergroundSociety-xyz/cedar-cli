@@ -1,5 +1,4 @@
 import fs from 'fs'
-import configFile from '../config.json'
 import pkg from '../package.json'
 import {Resource} from "./types/resource"
 import {AdjacencyMatrix} from "./types/adjacency-matrix"
@@ -17,31 +16,36 @@ import {NamingStrategiesRegistry} from "./utils/naming-strategies-registry"
 import {program} from "commander"
 import {Logger} from "winston"
 import {initLogger, initProgressBar} from "./utils/logger"
+import chalk from "chalk";
+import figlet from "figlet";
+import clear from "clear";
 
 program
-    .name(pkg.name)
+    .name(chalk.green(figlet.textSync('Cedar', "Small Keyboard")))
     .description(pkg.description)
     .version(pkg.version)
     .option('-q, --quiet', 'Quiet mode: no console output', false)
     .option('-m, --metadata', 'No images, metadata cache files only', false)
-// .option('-c, --cache', 'generate images from cache file', false)
+    .option('-c, --config <value>', 'Uses a custom config file', './config.json')
+// .option('-f, --file', 'generate images from cache file', false)
+// todo : get config from cache
 
 program.parse()
 
 const isQuietModeEnabled = program.opts().quiet
 const isMetadataOnlyEnabled = program.opts().metadata
-// const isCacheModeEnabled = program.opts().cache
+const useCustomConfig = program.opts().config
+
+clear()
+console.log(chalk.green(figlet.textSync('Cedar', "Small Keyboard")))
+console.log(`Cedar CLI`)
+console.log(`v${pkg.version}`)
 
 const logger: Logger = initLogger(isQuietModeEnabled)
+logger.info('🚀 Starting Cedar...')
 
-logger.info('Starting Cedar...')
-
-// todo : get config from cache
-// const config = isCacheModeEnabled ? JSON.parse('.cache/config.json') : configFile
-const config = configFile
-
-// logger.info(isCacheModeEnabled ? 'succesfully retrieved config from cache' : 'successfully loaded config from file')
-logger.info('successfully loaded config from file')
+const config = JSON.parse(fs.readFileSync(useCustomConfig, {encoding: 'utf-8'}))
+logger.info(`🗄 successfully loaded config from path ${useCustomConfig}`)
 
 const options = config.options
 const steps: Step[] = config.steps as Step[]
@@ -57,15 +61,13 @@ const resources: Resource[] = config.resources.map((r: any, index: number) => {
 
     return res
 })
-
 logger.info(`${resources.length} resources found and successfully initialized`)
 
 if (!fs.existsSync('.cache'))
     fs.mkdirSync('.cache')
 
-// !isCacheModeEnabled && fs.writeFileSync('.cache/config.json', JSON.stringify(config))
 fs.writeFileSync('.cache/config.json', JSON.stringify(config))
-logger.info('.cache folder init')
+logger.info('🗄 .cache folder init')
 
 
 const matrix = new AdjacencyMatrix(resources.length)
@@ -83,12 +85,8 @@ resources.forEach(start => {
     })
 })
 
-// if (!isCacheModeEnabled) {
-//     fs.writeFileSync(".cache/matrix.json", JSON.stringify(matrix))
-//     logger.info(`matrix saved at .cache/matrix.json`)
-// }
 fs.writeFileSync(".cache/matrix.json", JSON.stringify(matrix))
-logger.info(`matrix saved at .cache/matrix.json`)
+logger.info(`🗄 matrix saved at .cache/matrix.json`)
 
 const header = `,${resources.map(r => `${r.step}:${r.name}`).join(',')}`
 const rows = [...matrix.vertex].map((v, i) => `${resources[i].step}:${resources[i].name},` + v.join(',')).join('\n')
@@ -200,35 +198,26 @@ export const buildResourcesLists = (matrix: AdjacencyMatrix, resources: Resource
     return items
 }
 
-// logger.info(isCacheModeEnabled ? `retrieving resources lists from cache...` : `starting to build resources lists...`)
-logger.info(`starting to build resources lists...`)
-
-// const resourcesLists = !isCacheModeEnabled ? buildResourcesLists(matrix, resources, steps, options.supply) : JSON.parse('.cache/resources-lists.json') as Resource[][]
+logger.info(`🌲 starting to build resources lists...`)
 const resourcesLists = buildResourcesLists(matrix, resources, steps, config)
 
 if (resourcesLists.length === options.supply) {
-    // logger.info(`successfully ${isCacheModeEnabled ? 'retrieved' : 'built'} ${resourcesLists.length} resources lists !`)
-    logger.info(`successfully built ${resourcesLists.length} resources lists !`)
+    logger.info(`🎉 successfully built ${resourcesLists.length} resources lists !`)
 } else {
-    // const err = `only ${resourcesLists.length} resources lists ${isCacheModeEnabled ? 'retrieved' : 'built'}`
     const err = `${resourcesLists.length}/${options.supply} resources lists built`
     logger.error(err)
     process.exit()
 }
 
-// if (!isCacheModeEnabled) {
-//     fs.writeFileSync(".cache/stats.json", JSON.stringify(resources))
-//     fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
-// }
 fs.writeFileSync(".cache/stats.json", JSON.stringify(resources.map(r => ({
     step: r.step,
     name: r.name,
     supplyPct: r.supplyPct,
     quantity: r.count
 }))))
-logger.info('stats saved at .cache/stats.json')
+logger.info('🗄 stats saved at .cache/stats.json')
 fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
-logger.info('resources lists saved at .cache/resources-list.json')
+logger.info('🗄 resources lists saved at .cache/resources-list.json')
 
 /**
  * Generates a metadata json file from resources having an attribute
@@ -255,7 +244,7 @@ export const generateMetadataFile = async (resources: Resource[], config: any, e
         name,
         config.metadata.symbol,
         config.metadata.description,
-        config.metadata.sellerFeesBasisPoint,
+        config.metadata.sellerFeesBasisPoints,
         filepath,
         attributes as { trait_type: string, value: string }[],
         properties,
@@ -324,11 +313,11 @@ const namingContext = new NamingContext(namingStrategy)
 if (fs.existsSync(outputUri)) fs.rmSync(outputUri, {recursive: true})
 fs.mkdirSync(outputUri)
 
-logger.info('output folder init')
+logger.info('🗄 output folder init')
 
 try {
     !isMetadataOnlyEnabled && generateNfts(resourcesLists, config, outputUri, namingContext, isQuietModeEnabled)
-        .then(_ => logger.info('done generating images and metadata'))
+        .then(_ => logger.info(' 🎉 Done generating images and metadata'))
 } catch (e) {
     logger.error((e as Error).message)
 }

@@ -85,6 +85,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/figlet@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@types/figlet/-/figlet-1.5.4.tgz#54a426d63e921a9bca44102c5b1b1f206fa56d93"
+  integrity sha512-cskPTju7glYgzvkJy/hftqw7Fen3fsd0yrPOqcbBLJu+YdDQuA438akS1g+2XVKGzsQOnXGV2I9ePv6xUBnKMQ==
+
 "@types/inquirer@^9.0.0":
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/@types/inquirer/-/inquirer-9.0.0.tgz#32925c74dfccc3f482d9a25267333b690b75aac4"

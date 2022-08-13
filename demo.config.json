@@ -12,7 +12,7 @@
     ],
     "description": "Test Shapes",
     "name": "Shapes",
-    "sellerFeesBasisPoint": 500,
+    "sellerFeesBasisPoints": 500,
     "symbol": "SHP"
   },
   "options": {

@@ -21,6 +21,17 @@ Then duplicate the sample config:
 cp config.sample.json config.json
 ```
 
+You can fill this config file by hand or using the config CLI, it'll guide you through all the steps
+```shell
+yarn config:generate
+```
+
+This command will output a file named `config-YYYY-MM-dd.json`. You can either rename this file using
+```shell
+mv config-YYYY-MM-dd.json config.json
+```
+or use the `--config` flag when you run the app.
+
 ## Running
 
 Just run `yarn start` to run the app. 

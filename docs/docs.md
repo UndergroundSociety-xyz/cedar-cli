@@ -93,8 +93,11 @@ config options
 
 ### The config file
 
-Just so you know, Underground Society is offering the generation of your NFTs via a graphic interface tool as a paid
-service which is way more convenient.
+Just so you know, Underground Society is offering custom support for this tool as a paid service, from your asset to a hosted Candy Machine ready to mint (TBD).
+In the meantime, everything following you can generate with the Config CLI, by running 
+```shell
+yarn config:generate
+```
 
 #### Metadata
 
@@ -123,7 +126,7 @@ service which is way more convenient.
 This part represents the metadata for the whole collection. It basically tells how it's called, the percentage of
 royalties and the creators.
 
-`sellerFeesBasisPoint`, like in Metaplex's standard, represent the amount of royalties taken on each after market sale.
+`sellerFeesBasisPoints`, like in Metaplex's standard, represent the amount of royalties taken on each after market sale.
 The percentage you're willing to take is multiplied by 100 (for the coma issues): this means if you want to take **8%**,
 you'll be writing **800**.
 
