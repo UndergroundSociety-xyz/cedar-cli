@@ -2,21 +2,26 @@
   "name": "cedar-cli",
   "version": "0.1.0",
   "description": "Cedar Solana NFT generator",
-  "main": "index.js",
   "author": {
     "name": "johnnyBoy",
     "email": "johnnyboy@undergroundsociety.xyz"
   },
   "license": "AGPL-3.0-only",
+  "main": "main.js",
   "scripts": {
+    "config:generate": "ts-node src/config.ts",
     "start": "ts-node src/main.ts",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register --reporter=Nyan 'test/*.spec.ts'"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",
+    "@types/chalk": "^2.2.0",
+    "@types/clear": "^0.1.2",
+    "@types/cli-progress": "^3.11.0",
+    "@types/figlet": "^1.5.4",
+    "@types/inquirer": "^9.0.0",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.6.3",
-    "@types/cli-progress": "^3.11.0",
     "@types/sharp": "^0.30.4",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
@@ -25,8 +30,14 @@
   },
   "dependencies": {
     "@undergroundsociety/cybername-gen": "^1.1.0",
+    "chalk": "^4.1.2",
+    "clear": "^0.1.0",
     "cli-progress": "^3.11.2",
     "commander": "^9.4.0",
+    "figlet": "^1.5.2",
+    "inquirer": "^8.2.4",
+    "inquirer-press-to-continue": "^1.1.4",
+    "random-words": "^1.2.0",
     "sharp": "^0.30.7",
     "winston": "^3.8.1"
   }
