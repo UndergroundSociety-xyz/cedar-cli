@@ -23,15 +23,17 @@ on top).
 
 The project uses [Sharp](https://sharp.pixelplumbing.com/) under the hood, which is a great image generation and
 handling library.
-It is faster than [Node Canvas](https://github.com/Automattic/node-canvas) (used in Hashlips) and offers way more
+It is faster than [Node Canvas](https://github.com/Automattic/node-canvas) and offers way more
 options like blending modes.
 
 ## Benchmarks
 
-| Machine specs                             | Supply | Nb of Layers | Generation time |
-|:------------------------------------------|-------:|-------------:|----------------:|
-| Macbook Pro 15" 2016 - Core i7 - RAM 16GB |   1000 |            5 |             12s |
-| Macbook Pro 15" 2016 - Core i7 - RAM 16GB |  10000 |            5 |           1m54s |
+| Machine specs                              | Supply | Number of layers | Number of total resources | Generation time |
+|:-------------------------------------------|-------:|-----------------:|--------------------------:|----------------:|
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |   1000 |                5 |                        21 |             12s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |                5 |                        21 |         1min54s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |    777 |                7 |                        69 |         3min32s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |                7 |                        69 |        54min10s |
 
 ## How to
 
