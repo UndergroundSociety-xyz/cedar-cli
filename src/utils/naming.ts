@@ -15,7 +15,7 @@ export class NamingContext {
         this._strategy = value
     }
 
-    execute(config: any, resources: Resource[], edition: number): string {
+    async execute(config: any, resources: Resource[], edition: number): Promise<string> {
         return this._strategy.execute(config, resources, edition)
     }
 }
@@ -23,5 +23,5 @@ export class NamingContext {
 export interface INamingStrategy {
     name: string,
 
-    execute(config: any, resources: Resource[], edition: number): string
+    execute(config: any, resources: Resource[], edition: number): Promise<string>
 }

@@ -15,7 +15,7 @@ export class RandomWordsNamingStrategy implements INamingStrategy {
      * @param resources
      * @param edition
      */
-    execute(config: any, resources: Resource[], edition: number): string {
+    async execute(config: any, resources: Resource[], edition: number): Promise<string> {
 
         return randomWords({exactly: 2}).map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
     }

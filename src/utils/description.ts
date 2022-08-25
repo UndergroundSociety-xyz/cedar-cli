@@ -15,7 +15,7 @@ export class DescriptionContext {
         this._strategy = value
     }
 
-    execute(config: any, resources: Resource[], edition: number, name: string): string {
+    async execute(config: any, resources: Resource[], edition: number, name: string): Promise<string> {
         return this._strategy.execute(config, resources, edition, name)
     }
 }
@@ -23,5 +23,5 @@ export class DescriptionContext {
 export interface IDescriptionStrategy {
     name: string,
 
-    execute(config: any, resources: Resource[], edition: number, name: string): string
+    execute(config: any, resources: Resource[], edition: number, name: string): Promise<string>
 }

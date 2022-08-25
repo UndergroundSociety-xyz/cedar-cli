@@ -34,9 +34,11 @@
     "clear": "^0.1.0",
     "cli-progress": "^3.11.2",
     "commander": "^9.4.0",
+    "dotenv": "^16.0.1",
     "figlet": "^1.5.2",
     "inquirer": "^8.2.4",
     "inquirer-press-to-continue": "^1.1.4",
+    "openai": "^3.0.0",
     "random-words": "^1.2.0",
     "sharp": "^0.30.7",
     "winston": "^3.8.1"

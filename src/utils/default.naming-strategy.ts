@@ -8,7 +8,7 @@ export class DefaultNamingStrategy implements INamingStrategy {
 
     name: string = 'default';
 
-    execute(config: any, resources: Resource[], edition: number): string {
+    async execute(config: any, resources: Resource[], edition: number): Promise<string> {
 
         return `${config.metadata.name} #${edition}`
     }

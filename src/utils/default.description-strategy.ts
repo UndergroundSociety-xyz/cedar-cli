@@ -8,7 +8,7 @@ export class DefaultDescriptionStrategy implements IDescriptionStrategy {
 
     name: string = 'default';
 
-    execute(config: any, resources: Resource[], edition: number, name: string): string {
+    async execute(config: any, resources: Resource[], edition: number, name: string): Promise<string> {
 
         return config.metadata.description
     }

@@ -239,8 +239,8 @@ export const generateMetadataFile = async (resources: Resource[],
                                            namingContext: NamingContext,
                                            descriptionContext: DescriptionContext) => {
     const filename = `${edition}.json`
-    let name = namingContext.execute(config, resources, edition)
-    let description = descriptionContext.execute(config, resources, edition, name)
+    let name = await namingContext.execute(config, resources, edition)
+    let description = await descriptionContext.execute(config, resources, edition, name)
 
     const filepath = path.join(outputUri, `${edition}.${config.options.outputFormat ?? 'png'}`)
 

@@ -15,7 +15,7 @@ export class CyberpunkNamingStrategy implements INamingStrategy {
      * @param resources
      * @param edition
      */
-    execute(config: any, resources: Resource[], edition: number): string {
+    async execute(config: any, resources: Resource[], edition: number): Promise<string> {
         const genderValue: string | undefined = resources.find(r => r.step === 'gender')?.attribute?.value
 
         if (!genderValue) {
