@@ -37,9 +37,11 @@ const isMetadataOnlyEnabled = program.opts().metadata
 const useCustomConfig = program.opts().config
 
 clear()
-console.log(chalk.green(figlet.textSync('Cedar', "Small Keyboard")))
-console.log(`Cedar CLI`)
-console.log(`v${pkg.version}`)
+if (!isQuietModeEnabled) {
+    console.log(chalk.green(figlet.textSync('Cedar', "Small Keyboard")))
+    console.log(`Cedar CLI`)
+    console.log(`v${pkg.version}`)
+}
 
 const logger: Logger = initLogger(isQuietModeEnabled)
 logger.info('🚀 Starting Cedar...')
