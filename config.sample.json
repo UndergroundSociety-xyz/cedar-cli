@@ -18,6 +18,7 @@
   "options": {
     "supply": 0,
     "namingStrategy": "default",
+    "descriptionStrategy": "default",
     "uniqueEditions": true
   },
   "steps": [

@@ -69,6 +69,19 @@ export const getOptions = async (): Promise<any> => {
         },
         {
             type: 'confirm',
+            name: 'useDescriptionStrategy',
+            default: false,
+            message: 'Would you like to use a specific description strategy?',
+        },
+        {
+            type: 'string',
+            name: 'descriptionStrategy',
+            message: 'What description strategy would you like to use?',
+            default: 'default',
+            when: answers => answers['useDescriptionStrategy']
+        },
+        {
+            type: 'confirm',
             name: 'uniqueEditions',
             default: true,
             message: 'Would you like your NFTs to be unique?'
@@ -327,6 +340,7 @@ export const getConfigFromAnswers = (metadataAnswers: Answers,
     const options = {
         supply: optionsAnswers.supply,
         namingStrategy: optionsAnswers.useNamingStrategy ? optionsAnswers.namingStrategy : 'default',
+        descriptionStrategy: optionsAnswers.useDescriptionStrategy ? optionsAnswers.descriptionStrategy : 'default',
         uniqueEditions: optionsAnswers.uniqueEditions
     }
 

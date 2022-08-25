@@ -145,6 +145,7 @@ This works basically the same as [Metaplex](https://docs.metaplex.com/programs/t
   "options": {
     "supply": 0,
     "namingStrategy": "default",
+    "descriptionStrategy": "default",
     "uniqueEditions": true
   },
   ...
@@ -162,8 +163,14 @@ number}" ("Underground Society #4622" for example).
 You can use alternative naming strategies, such as `cyberpunk` to generate a cyberpunkish first name and last name (needs a `gender` step), or `random-words` which will generate 2 random words (such as "Egg Negative" or "Sure Satellites"...).
 You can also implement your own.
 
-If you're not sure what to do, just leave it on `default`. If you're willing to dig a bit in the code, you can
-check it out [here](/devs/naming-strategies.md).
+`descriptionStrategy` is on `default`, it means each edition will receive whatever you put in `metadata > description` as a description.
+
+As for naming, you can use alternative strategies or implement your own easily.
+
+[//]: # (todo : add description strategies)
+
+If you're not sure what to do, just leave these last two parameters on `default`. If you're willing to dig a bit in the code, you can
+check [naming strategies](./devs/naming-strategies.md) & [description strategies](./devs/description-strategies.md) out.
 
 #### Steps
 

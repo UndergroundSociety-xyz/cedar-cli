@@ -1,6 +1,6 @@
 # Naming strategies
 
-Using the [strategy](https://refactoring.guru/design-patterns/strategy) pattern, you can register a strategy in Cedar or custom naming of your NFTs.
+Using the [strategy](https://refactoring.guru/design-patterns/strategy) pattern, you can register a strategy in Cedar for custom naming of your NFTs.
 
 For example, we use the 'cyberpunk' naming strategy, so that our NFTs are named with real first and lastnames !
 

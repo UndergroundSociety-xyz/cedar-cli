@@ -19,6 +19,8 @@ import {initLogger, initProgressBar} from "./utils/logger"
 import chalk from "chalk";
 import figlet from "figlet";
 import clear from "clear";
+import {DescriptionStrategiesRegistry} from "./utils/description-strategies-registry";
+import {DescriptionContext, IDescriptionStrategy} from "./utils/description";
 
 program
     .name(chalk.green(figlet.textSync('Cedar', "Small Keyboard")))
@@ -228,10 +230,17 @@ logger.info('🗄 resources lists saved at .cache/resources-list.json')
  * @param edition
  * @param outputUri
  * @param namingContext
+ * @param descriptionContext
  */
-export const generateMetadataFile = async (resources: Resource[], config: any, edition: number, outputUri: string, namingContext: NamingContext) => {
+export const generateMetadataFile = async (resources: Resource[],
+                                           config: any,
+                                           edition: number,
+                                           outputUri: string,
+                                           namingContext: NamingContext,
+                                           descriptionContext: DescriptionContext) => {
     const filename = `${edition}.json`
     let name = namingContext.execute(config, resources, edition)
+    let description = descriptionContext.execute(config, resources, edition, name)
 
     const filepath = path.join(outputUri, `${edition}.${config.options.outputFormat ?? 'png'}`)
 
@@ -245,7 +254,7 @@ export const generateMetadataFile = async (resources: Resource[], config: any, e
     const metadata = new Metadata(
         name,
         config.metadata.symbol,
-        config.metadata.description,
+        description,
         config.metadata.sellerFeesBasisPoints,
         filepath,
         attributes as { trait_type: string, value: string }[],
@@ -289,9 +298,15 @@ export const generateImage = async (resources: Resource[], steps: Step[], editio
  * @param config
  * @param outputUri
  * @param namingContext
+ * @param descriptionContext
  * @param quietMode
  */
-export const generateNfts = async (resourcesLists: Resource[][], config: any, outputUri: string, namingContext: NamingContext, quietMode = false) => {
+export const generateNfts = async (resourcesLists: Resource[][],
+                                   config: any,
+                                   outputUri: string,
+                                   namingContext: NamingContext,
+                                   descriptionContext: DescriptionContext,
+                                   quietMode = false) => {
     let progressBar
 
     if (!quietMode) {
@@ -301,7 +316,7 @@ export const generateNfts = async (resourcesLists: Resource[][], config: any, ou
     // todo : ability to pause / restart on an arbitrary edition
     for (let i = 1; i <= resourcesLists.length; i++) {
         await generateImage(resourcesLists[i - 1], config.steps, i, outputUri, config.options.outputFormat)
-        await generateMetadataFile(resourcesLists[i - 1], config, i, outputUri, namingContext)
+        await generateMetadataFile(resourcesLists[i - 1], config, i, outputUri, namingContext, descriptionContext)
         !quietMode && progressBar?.increment()
     }
 
@@ -309,16 +324,21 @@ export const generateNfts = async (resourcesLists: Resource[][], config: any, ou
 }
 
 const outputUri = 'output'
+
 const namingStrategy = NamingStrategiesRegistry.get(config.options.namingStrategy) ?? {} as INamingStrategy
+const descriptionStrategy = DescriptionStrategiesRegistry.get(config.options.descriptionStrategy) ?? {} as IDescriptionStrategy
 const namingContext = new NamingContext(namingStrategy)
+logger.info('🗄 naming context initialized')
+const descriptionContext = new DescriptionContext(descriptionStrategy)
+logger.info('🗄 description context initialized')
 
 if (fs.existsSync(outputUri)) fs.rmSync(outputUri, {recursive: true})
 fs.mkdirSync(outputUri)
 
-logger.info('🗄 output folder init')
+logger.info('🗄 output folder initialized')
 
 try {
-    !isMetadataOnlyEnabled && generateNfts(resourcesLists, config, outputUri, namingContext, isQuietModeEnabled)
+    !isMetadataOnlyEnabled && generateNfts(resourcesLists, config, outputUri, namingContext, descriptionContext, isQuietModeEnabled)
         .then(_ => logger.info(' 🎉 Done generating images and metadata'))
 } catch (e) {
     logger.error((e as Error).message)
