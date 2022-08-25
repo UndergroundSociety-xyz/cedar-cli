@@ -1,15 +1,14 @@
-import {CyberpunkNamingStrategy} from "./cyberpunk.naming-strategy";
 import {Resource} from "../types/resource";
+import {DefaultNamingStrategy} from "./default.naming-strategy";
 
 export class NamingContext {
     private _strategy!: INamingStrategy
 
     /**
-     * Default strategy is CyberpunkNamingStrategy
      * @param strategy
      */
     constructor(strategy?: INamingStrategy) {
-        this._strategy = strategy ?? new CyberpunkNamingStrategy()
+        this._strategy = strategy ?? new DefaultNamingStrategy()
     }
 
     set strategy(value: INamingStrategy) {

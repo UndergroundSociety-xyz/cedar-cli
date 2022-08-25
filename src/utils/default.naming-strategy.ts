@@ -10,6 +10,6 @@ export class DefaultNamingStrategy implements INamingStrategy {
 
     execute(config: any, resources: Resource[], edition: number): string {
 
-        return `${config.metadata.collection.name} #${edition}`
+        return `${config.metadata.name} #${edition}`
     }
 }
