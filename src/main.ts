@@ -127,7 +127,18 @@ export const buildResourcesList = (matrix: AdjacencyMatrix, steps: Step[], resou
             nextVisited[next] = true
             let currentNext: number | undefined = next
 
+            let subCount = 0
             while (nextStack.length) {
+                subCount++
+                if (subCount === 10000) {
+                    const error = {
+                        currentResource: currentResource,
+                        currentResourceList: [...results].map(r => `${r.step.toUpperCase()} - ${r.name}`)
+                    }
+                    fs.writeFileSync('.cache/error.json', JSON.stringify(error))
+                    throw new Error('infinite loop, find error details in .cache/error.json')
+                }
+
                 currentNext = nextStack.pop() as number
 
                 // if one of results is found in the next one's restrictions, then pick a new next resource and push it to the stack if it exists.
