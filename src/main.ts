@@ -231,7 +231,17 @@ fs.writeFileSync(".cache/stats.json", JSON.stringify(resources.map(r => ({
     quantity: r.count
 }))))
 logger.info('🗄 stats saved at .cache/stats.json')
-fs.writeFileSync(".cache/resources-lists.json", JSON.stringify(resourcesLists))
+fs.writeFileSync(
+    ".cache/resources-lists.json",
+    JSON.stringify(
+        resourcesLists.map(
+            (rl, i) => ({
+                index: i,
+                resources: rl.map(r => `${r.step.toUpperCase()} - ${r.name}`)
+            })
+        )
+    )
+)
 logger.info('🗄 resources lists saved at .cache/resources-list.json')
 
 /**
