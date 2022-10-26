@@ -263,7 +263,7 @@ export const generateMetadataFile = async (resources: Resource[],
     let name = await namingContext.execute(config, resources, edition)
     let description = await descriptionContext.execute(config, resources, edition, name)
 
-    const filepath = path.join(outputUri, `${edition}.${config.options.outputFormat ?? 'png'}`)
+    const filepath = path.join('assets', `${edition}.${config.options.outputFormat ?? 'png'}`)
 
     const attributes = resources
         .filter(resource => !!resource.attribute)
