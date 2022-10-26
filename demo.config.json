@@ -18,6 +18,7 @@
   "options": {
     "supply": 100,
     "namingStrategy": "cyberpunk",
+    "descriptionStrategy": "ai-demo",
     "uniqueEditions": true
   },
   "steps": [
@@ -99,7 +100,7 @@
     {
       "name": "blue",
       "step": "bg",
-      "uri": "assets/bg/blue.png",
+      "uri": "demo-assets/bg/blue.png",
       "outcomes": [
         {
           "step": "shp.col",
@@ -140,7 +141,7 @@
     {
       "name": "red",
       "step": "bg",
-      "uri": "assets/bg/red.png",
+      "uri": "demo-assets/bg/red.png",
       "outcomes": [
         {
           "step": "shp.col",
@@ -181,7 +182,7 @@
     {
       "name": "green",
       "step": "bg",
-      "uri": "assets/bg/green.png",
+      "uri": "demo-assets/bg/green.png",
       "outcomes": [
         {
           "step": "shp.col",
@@ -222,7 +223,7 @@
     {
       "name": "triangle",
       "step": "shp",
-      "uri": "assets/shp/triangle.png",
+      "uri": "demo-assets/shp/triangle.png",
       "outcomes": [
         {
           "step": "in.shp",
@@ -248,7 +249,7 @@
     {
       "name": "square",
       "step": "shp",
-      "uri": "assets/shp/square.png",
+      "uri": "demo-assets/shp/square.png",
       "outcomes": [
         {
           "step": "in.shp",
@@ -274,7 +275,7 @@
     {
       "name": "circle",
       "step": "shp",
-      "uri": "assets/shp/circle.png",
+      "uri": "demo-assets/shp/circle.png",
       "outcomes": [
         {
           "step": "in.shp",
@@ -300,7 +301,7 @@
     {
       "name": "triangle",
       "step": "in.shp",
-      "uri": "assets/in.shp/triangle.png",
+      "uri": "demo-assets/in.shp/triangle.png",
       "outcomes": [
         {
           "step": "corner",
@@ -321,7 +322,7 @@
     {
       "name": "square",
       "step": "in.shp",
-      "uri": "assets/in.shp/square.png",
+      "uri": "demo-assets/in.shp/square.png",
       "outcomes": [
         {
           "step": "corner",
@@ -342,7 +343,7 @@
     {
       "name": "circle",
       "step": "in.shp",
-      "uri": "assets/in.shp/circle.png",
+      "uri": "demo-assets/in.shp/circle.png",
       "outcomes": [
         {
           "step": "corner",
@@ -363,7 +364,7 @@
     {
       "name": "blue.tri",
       "step": "shp.col",
-      "uri": "assets/shp.col/blue.tri.png",
+      "uri": "demo-assets/shp.col/blue.tri.png",
       "outcomes": [
         {
           "step": "shp",
@@ -379,7 +380,7 @@
     {
       "name": "blue.sq",
       "step": "shp.col",
-      "uri": "assets/shp.col/blue.sq.png",
+      "uri": "demo-assets/shp.col/blue.sq.png",
       "outcomes": [
         {
           "step": "shp",
@@ -395,7 +396,7 @@
     {
       "name": "blue.ci",
       "step": "shp.col",
-      "uri": "assets/shp.col/blue.ci.png",
+      "uri": "demo-assets/shp.col/blue.ci.png",
       "outcomes": [
         {
           "step": "shp",
@@ -411,7 +412,7 @@
     {
       "name": "red.tri",
       "step": "shp.col",
-      "uri": "assets/shp.col/red.tri.png",
+      "uri": "demo-assets/shp.col/red.tri.png",
       "outcomes": [
         {
           "step": "shp",
@@ -427,7 +428,7 @@
     {
       "name": "red.sq",
       "step": "shp.col",
-      "uri": "assets/shp.col/red.sq.png",
+      "uri": "demo-assets/shp.col/red.sq.png",
       "outcomes": [
         {
           "step": "shp",
@@ -443,7 +444,7 @@
     {
       "name": "red.ci",
       "step": "shp.col",
-      "uri": "assets/shp.col/red.ci.png",
+      "uri": "demo-assets/shp.col/red.ci.png",
       "outcomes": [
         {
           "step": "shp",
@@ -459,7 +460,7 @@
     {
       "name": "green.tri",
       "step": "shp.col",
-      "uri": "assets/shp.col/green.tri.png",
+      "uri": "demo-assets/shp.col/green.tri.png",
       "outcomes": [
         {
           "step": "shp",
@@ -475,7 +476,7 @@
     {
       "name": "green.sq",
       "step": "shp.col",
-      "uri": "assets/shp.col/green.sq.png",
+      "uri": "demo-assets/shp.col/green.sq.png",
       "outcomes": [
         {
           "step": "shp",
@@ -491,7 +492,7 @@
     {
       "name": "green.ci",
       "step": "shp.col",
-      "uri": "assets/shp.col/green.ci.png",
+      "uri": "demo-assets/shp.col/green.ci.png",
       "outcomes": [
         {
           "step": "shp",
@@ -507,7 +508,7 @@
     {
       "name": "triangle",
       "step": "corner",
-      "uri": "assets/corner/triangle.png",
+      "uri": "demo-assets/corner/triangle.png",
       "attribute": {
         "trait_type": "Corner",
         "value": "Triangle"
@@ -516,7 +517,7 @@
     {
       "name": "square",
       "step": "corner",
-      "uri": "assets/corner/square.png",
+      "uri": "demo-assets/corner/square.png",
       "attribute": {
         "trait_type": "Corner",
         "value": "Square"

@@ -1,5 +1,5 @@
 import * as chai from "chai"
-import {pickRandomIndex} from "../src/utils/helpers";
+import {pickRandomIndex} from "../src/utils/helpers"
 
 chai.should()
 
