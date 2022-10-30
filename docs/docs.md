@@ -28,12 +28,14 @@ options like blending modes.
 
 ## Benchmarks
 
-| Machine specs                              | Supply | Number of layers | Number of total resources | Generation time |
-|:-------------------------------------------|-------:|-----------------:|--------------------------:|----------------:|
-| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |   1000 |                5 |                        21 |             12s |
-| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |                5 |                        21 |         1min54s |
-| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |    777 |                7 |                        69 |         3min32s |
-| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |                7 |                        69 |        54min10s |
+| Machine specs                              | Supply | Number of layers | Number of total resources |     Image Size | Image format | Generation time |
+|:-------------------------------------------|-------:|-----------------:|--------------------------:|---------------:|-------------:|----------------:|
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |   1000 |                5 |                        21 |   300 x 300 px |          png |             12s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |                5 |                        21 |   300 x 300 px |          png |         1min54s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |    777 |                7 |                        69 | 1920 x 1920 px |          png |         3min32s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |                7 |                        69 | 1920 x 1920 px |          png |        54min10s |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |               20 |                       805 | 2357 x 2357 px |          png |         1h42min |
+| Macbook Pro 15" 2016 - Core i7 - RAM 16GB  |  10000 |               20 |                       939 | 1000 x 1000 px |          png |        40min17s |
 
 ## How to
 

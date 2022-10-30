@@ -310,7 +310,10 @@ export const generateImage = async (resources: Resource[], steps: Step[], editio
     const filename = `${edition}.${format}`
     const filepath = path.join(outputUri, filename)
 
-    await sharp(base.input).composite(compose).toFormat(format as keyof FormatEnum).toFile(filepath)
+    await sharp(base.input)
+        .composite(compose)
+        .toFormat(format as keyof FormatEnum)
+        .toFile(filepath)
 }
 
 /**
