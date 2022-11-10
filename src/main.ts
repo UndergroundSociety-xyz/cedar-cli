@@ -70,7 +70,7 @@ logger.info(`${resources.length} resources found and successfully initialized`)
 if (!fs.existsSync('.cache'))
     fs.mkdirSync('.cache')
 
-fs.writeFileSync('.cache/config.json', JSON.stringify(config))
+fs.writeFileSync('.cache/config.json', JSON.stringify(config,null,2))
 logger.info('🗄 .cache folder init')
 
 
@@ -135,7 +135,7 @@ export const buildResourcesList = (matrix: AdjacencyMatrix, steps: Step[], resou
                         currentResource: currentResource,
                         currentResourceList: [...results].map(r => `${r.step.toUpperCase()} - ${r.name}`)
                     }
-                    fs.writeFileSync('.cache/error.json', JSON.stringify(error))
+                    fs.writeFileSync('.cache/error.json', JSON.stringify(error,null,2))
                     throw new Error('infinite loop, find error details in .cache/error.json')
                 }
 
@@ -239,7 +239,7 @@ fs.writeFileSync(
                 index: i,
                 resources: rl.map(r => `${r.step.toUpperCase()} - ${r.name}`)
             })
-        )
+        ),null,2
     )
 )
 logger.info('🗄 resources lists saved at .cache/resources-list.json')
